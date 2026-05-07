@@ -1,6 +1,6 @@
 /**
- * Cineby.gd Content Detector and Enhancer
- * This module detects and enhances specific elements on Cineby.gd
+ * Cineby.sc Content Detector and Enhancer
+ * This module detects and enhances specific elements on Cineby.sc
  */
 
 /**
@@ -8,17 +8,15 @@
  */
 function enhanceContentItems() {
   const selectors = [
-    // Common movie/show card selectors - update these after inspecting the actual site
-    '.movie-card', 
-    '.content-item', 
-    '.film-item',
-    '.show-card',
-    // Typical class names for grid items
-    '.grid-item', 
-    '.card',
-    // Image containers
-    '.poster-container',
-    '.thumbnail',
+    // Cineby.sc CSS module classes (hashed, matched by prefix)
+    '[class*="movieCard_movieCard"]',
+    // Cineby.sc semantic media card classes
+    '.media-card',
+    '.media-card-horizontal',
+    '.media-card-vertical',
+    '.glass-card',
+    '.glass-card-dark',
+    '.glass-card-subtle',
     // Any anchors with images (likely to be content items)
     'a:has(img)'
   ];
@@ -38,7 +36,7 @@ function enhanceContentItems() {
     item.setAttribute('data-tflix-item', index);
     
     // Special handling for Cineby.gd
-    if (window.location.hostname.includes('cineby.gd')) {
+    if (window.location.hostname.includes('cineby.sc')) {
       const anchor = item.tagName === 'A' ? item : item.querySelector('a');
       if (anchor && anchor.href && anchor.href.includes('/movie/')) {
         // Add a special click handler for Cineby movie links
@@ -86,7 +84,7 @@ function enhanceContentItems() {
   });
   
   // For Cineby.gd, detect and enhance play buttons specifically
-  if (window.location.hostname.includes('cineby.gd')) {
+  if (window.location.hostname.includes('cineby.sc')) {
     enhanceCinebyPlayButtons();
   }
 }
@@ -100,7 +98,8 @@ function enhanceNavigationMenus() {
     'header nav',
     '.main-nav',
     '.navigation',
-    '.menu',
+    // Cineby.sc CSS module menu class (matched by prefix)
+    '[class*="menu_menu"]',
     '.sidebar'
   ];
   
@@ -246,8 +245,8 @@ function addSearchNavigationHandler() {
     }
   });
   
-  // If the site is cineby.gd, specifically look for the search link
-  if (window.location.hostname.includes('cineby.gd')) {
+  // If the site is cineby.sc, specifically look for the search link
+  if (window.location.hostname.includes('cineby.sc')) {
     // Make search more accessible without requiring keyboard shortcuts
     const searchLinks = document.querySelectorAll('a[href*="search"]');
     searchLinks.forEach(link => {
@@ -295,9 +294,9 @@ function activateSearch(element) {
     return;
   }
   
-  // For cineby.gd specifically, navigate to the search page
-  if (window.location.hostname.includes('cineby.gd')) {
-    window.location.href = 'https://www.cineby.gd/search';
+  // For cineby.sc specifically, navigate to the search page
+  if (window.location.hostname.includes('cineby.sc')) {
+    window.location.href = 'https://www.cineby.sc/search';
     return;
   }
 }
@@ -681,7 +680,7 @@ function detectAndEnhanceContent() {
   enhanceCinebyVideoPlayer();
   
   // Special handling for Cineby.gd on movie info pages
-  if (window.location.hostname.includes('cineby.gd') && 
+  if (window.location.hostname.includes('cineby.sc') && 
       window.location.pathname.includes('/movie/')) {
     enhanceCinebyPlayButtons();
   }
