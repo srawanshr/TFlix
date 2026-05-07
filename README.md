@@ -1,6 +1,6 @@
 # TFlix
 
-TFlix is a TizenBrew module that transforms [Cineby.gd](https://www.cineby.sc/) into a TV-friendly experience for Samsung TVs. It creates a Netflix-like navigation system optimized for remote control operation.
+TFlix is a TizenBrew module that transforms [Cineby.sc](https://www.cineby.sc/) into a TV-friendly experience for Samsung TVs. It creates a Netflix-like navigation system optimized for remote control operation.
 
 ## Features
 
