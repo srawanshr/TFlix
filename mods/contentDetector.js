@@ -8,9 +8,10 @@
  */
 function enhanceContentItems() {
   const selectors = [
-    // Cineby.sc CSS module classes (hashed, matched by prefix)
-    '[class*="movieCard_movieCard"]',
-    // Cineby.sc semantic media card classes
+    // CineHD.app content links
+    'a[href^="/movie/"]',
+    'a[href^="/tv/"]',
+    // Generic media card classes
     '.media-card',
     '.media-card-horizontal',
     '.media-card-vertical',
@@ -35,25 +36,17 @@ function enhanceContentItems() {
     // Add data attribute for easier selection
     item.setAttribute('data-tflix-item', index);
     
-    // Special handling for Cineby.gd
-    if (window.location.hostname.includes('cineby.sc')) {
+    // Special handling for CineHD.app
+    if (window.location.hostname.includes('cinehd.app')) {
       const anchor = item.tagName === 'A' ? item : item.querySelector('a');
-      if (anchor && anchor.href && anchor.href.includes('/movie/')) {
-        // Add a special click handler for Cineby movie links
+      if (anchor && anchor.href && (anchor.href.includes('/movie/') || anchor.href.includes('/tv/'))) {
         item.addEventListener('click', (e) => {
-          // Make sure the link loads correctly without going to a black screen
           e.preventDefault();
-          
-          // Show loading toast
-          showVideoInfoToast('Loading movie info...');
-          
-          // Navigate to the movie page
+          showVideoInfoToast('Loading info...');
           window.location.href = anchor.href;
         });
       } else if (item.tagName !== 'A' && !item.onclick) {
-        // Standard handling for non-anchor items
         item.addEventListener('click', () => {
-          // If there's an anchor inside, click it
           const anchor = item.querySelector('a');
           if (anchor) {
             anchor.click();
@@ -61,10 +54,8 @@ function enhanceContentItems() {
         });
       }
     } else {
-      // Standard handling for non-Cineby sites
       if (item.tagName !== 'A' && !item.onclick) {
         item.addEventListener('click', () => {
-          // If there's an anchor inside, click it
           const anchor = item.querySelector('a');
           if (anchor) {
             anchor.click();
@@ -83,8 +74,8 @@ function enhanceContentItems() {
     });
   });
   
-  // For Cineby.gd, detect and enhance play buttons specifically
-  if (window.location.hostname.includes('cineby.sc')) {
+  // For CineHD.app, detect and enhance play buttons specifically
+  if (window.location.hostname.includes('cinehd.app')) {
     enhanceCinebyPlayButtons();
   }
 }
@@ -98,8 +89,6 @@ function enhanceNavigationMenus() {
     'header nav',
     '.main-nav',
     '.navigation',
-    // Cineby.sc CSS module menu class (matched by prefix)
-    '[class*="menu_menu"]',
     '.sidebar'
   ];
   
@@ -245,9 +234,8 @@ function addSearchNavigationHandler() {
     }
   });
   
-  // If the site is cineby.sc, specifically look for the search link
-  if (window.location.hostname.includes('cineby.sc')) {
-    // Make search more accessible without requiring keyboard shortcuts
+  // For CineHD.app, make all search links accessible
+  if (window.location.hostname.includes('cinehd.app')) {
     const searchLinks = document.querySelectorAll('a[href*="search"]');
     searchLinks.forEach(link => {
       link.setAttribute('tabindex', '0');
@@ -294,9 +282,9 @@ function activateSearch(element) {
     return;
   }
   
-  // For cineby.sc specifically, navigate to the search page
-  if (window.location.hostname.includes('cineby.sc')) {
-    window.location.href = 'https://www.cineby.sc/search';
+  // For CineHD.app, navigate to the search page
+  if (window.location.hostname.includes('cinehd.app')) {
+    window.location.href = 'https://cinehd.app/search';
     return;
   }
 }
@@ -325,11 +313,12 @@ function showSearchToast() {
 }
 
 /**
- * Enhance video player with better controls specifically for Cineby.gd
+ * Enhance video player with better controls specifically for CineHD.app
  */
 function enhanceCinebyVideoPlayer() {
-  // Only run on movie pages
-  if (!window.location.pathname.includes('/movie/')) return;
+  // Only run on movie/TV pages
+  const path = window.location.pathname;
+  if (!path.includes('/movie/') && !path.includes('/tv/')) return;
   
   // Try to find the video player
   const videoPlayers = document.querySelectorAll('video');
@@ -396,7 +385,8 @@ function handleVideoKeyEvents(e) {
   if (!video) return;
   
   // Check if we're on a video page
-  if (!window.location.pathname.includes('/movie/')) return;
+  const path = window.location.pathname;
+  if (!path.includes('/movie/') && !path.includes('/tv/')) return;
   
   switch (e.key) {
     case 'Enter':
@@ -502,11 +492,12 @@ function showVideoInfoToast(message) {
 }
 
 /**
- * Enhance play buttons specifically for Cineby.gd
+ * Enhance play buttons specifically for CineHD.app
  */
 function enhanceCinebyPlayButtons() {
-  // Only run on movie info pages
-  if (!window.location.pathname.includes('/movie/')) return;
+  // Only run on movie/TV info pages
+  const path = window.location.pathname;
+  if (!path.includes('/movie/') && !path.includes('/tv/')) return;
   
   // Common selectors for play buttons
   const playButtonSelectors = [
@@ -679,9 +670,10 @@ function detectAndEnhanceContent() {
   enhanceSearchFunctionality();
   enhanceCinebyVideoPlayer();
   
-  // Special handling for Cineby.gd on movie info pages
-  if (window.location.hostname.includes('cineby.sc') && 
-      window.location.pathname.includes('/movie/')) {
+  // Special handling for CineHD.app on movie/TV info pages
+  const path = window.location.pathname;
+  if (window.location.hostname.includes('cinehd.app') &&
+      (path.includes('/movie/') || path.includes('/tv/'))) {
     enhanceCinebyPlayButtons();
   }
 }

@@ -124,7 +124,7 @@ function handleBackButton(e) {
   e.preventDefault(); // Prevent default back behavior
   
   // Special handling for Cineby.gd
-  if (window.location.hostname.includes('cineby.sc')) {
+  if (window.location.hostname.includes('cinehd.app')) {
     // Check if we're in a video player mode
     if (videoElement && videoElement.parentElement && 
         (document.fullscreenElement || 
@@ -326,7 +326,7 @@ function fixVideoPlaybackIssues(video) {
   }
   
   // Special handling for Cineby.gd
-  if (window.location.hostname.includes('cineby.sc')) {
+  if (window.location.hostname.includes('cinehd.app')) {
     // Make sure we can manipulate the video
     video.setAttribute('controlsList', 'nodownload');
     
@@ -368,8 +368,9 @@ function handleCinebyVideoKeyEvents(e) {
   if (!video) return;
   
   // Only process if we're on a video page and the video is visible
-  if (!window.location.pathname.includes('/movie/') || 
-      video.style.display === 'none' || 
+  const path = window.location.pathname;
+  if ((!path.includes('/movie/') && !path.includes('/tv/')) ||
+      video.style.display === 'none' ||
       video.style.visibility === 'hidden') {
     return;
   }
@@ -429,7 +430,7 @@ function handleVideoError(e) {
   const currentTime = videoElement.currentTime || 0;
   
   // Special handling for Cineby.gd
-  if (window.location.hostname.includes('cineby.sc')) {
+  if (window.location.hostname.includes('cinehd.app')) {
     // For Cineby, try a more aggressive recovery approach
     
     // First, check if it's just a missing source or corruption
